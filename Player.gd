@@ -2,7 +2,7 @@ extends KinematicBody2D
 
 export (int) var speed = 200
 export (float) var rotation_speed = 1.5
-
+onready var screensize = get_viewport_rect().size
 var velocity = Vector2()
 var rotation_dir = 0
 
@@ -19,6 +19,9 @@ func get_input():
 		velocity = Vector2(speed, 0).rotated(rotation)
 
 func _physics_process(delta):
+	screensize = get_viewport_rect().size
 	get_input()
 	rotation += rotation_dir * rotation_speed * delta
+	
+	
 	velocity = move_and_slide(velocity)
