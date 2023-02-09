@@ -10,7 +10,6 @@ export var offsets = [Vector2(0,0),Vector2(0,0)]
 export (float) var health = 1.0
 export (Color) var color1
 export (Color) var color2
-export (float) var damage
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	pass # Replace with function body.
@@ -21,5 +20,5 @@ func colorlerp(c1,c2,p):
 func _process(delta):
 	points = [player.position + offsets[0], player.position+offsets[1]-Vector2(1-health,0)*80]
 	default_color = colorlerp(color2,color1,health)
-func _on_KinematicBody2D_take_damage():
-	health -= damage
+func _on_KinematicBody2D_take_damage(damageamt):
+	health -= damageamt

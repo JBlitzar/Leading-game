@@ -4,11 +4,15 @@ export (int) var speed = 200
 export (float) var rotation_speed = 1.5
 export (float) var friction = 0.95
 signal take_damage
+signal player_die
+export (float) var damageamt = 0.05;
+var health: float = 1.0
 onready var screensize = get_viewport_rect().size
 var velocity = Vector2()
 var rotation_dir = 0
 func _ready():
 	var animation = $Sprite/AnimationPlayer.play("Boat")
+	self.connect("playerdie", get_node("/root/Main"), "playerdie")
 func get_input():
 	rotation_dir = 0
 	if Input.is_action_pressed("right"):
@@ -20,9 +24,20 @@ func get_input():
 	if Input.is_action_pressed("up"):
 		velocity = Vector2(speed, 0).rotated(rotation)
 func take_damage():
-	emit_signal("take_damage")
+	emit_signal("take_damage", damageamt)
 func _on_player_collided():
-	take_damage()
+	
+	health -= damageamt
+	if health >= 0:
+		take_damage()
+		
+		
+		
+	else:
+		emit_signal("player_die")
+	
+	
+	
 
 func _physics_process(delta):
 	screensize = get_viewport_rect().size

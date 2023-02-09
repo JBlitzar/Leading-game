@@ -13,7 +13,7 @@ func dismount():
 	mounted = false
 	follownode.has_passenger = false
 	follownode = null
-	print("dismount")
+	$CollisionShape2D.disabled = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
@@ -23,13 +23,12 @@ func _process(delta):
 
 
 func _on_Human_body_entered(body):
-	print("collide", body.get_collision_layer())
 	if body.get_collision_layer() == 4:
 		#Collided with wood
 		DIE()
 	if body.get_collision_layer() == 32769 and not body.has_passenger:
 		#Collided with bouy
-		print("mount on")
+		$CollisionShape2D.set_deferred("disabled", true)
 		follownode = body
 		body.has_passenger = true
 		mounted = true

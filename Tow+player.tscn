@@ -44,6 +44,5 @@ playernode = NodePath("../KinematicBody2D")
 offsets = [ Vector2( -40, -40 ), Vector2( 40, -40 ) ]
 color1 = Color( 0.196078, 1, 0, 1 )
 color2 = Color( 1, 0, 0, 1 )
-damage = 0.1
 
 [connection signal="take_damage" from="KinematicBody2D" to="HealthBar" method="_on_KinematicBody2D_take_damage"]
