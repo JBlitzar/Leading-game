@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Tow+player.tscn" type="PackedScene" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
@@ -7,11 +7,87 @@
 [ext_resource path="res://WoodManager.gd" type="Script" id=5]
 [ext_resource path="res://wall.tscn" type="PackedScene" id=6]
 [ext_resource path="res://wood.tscn" type="PackedScene" id=7]
+[ext_resource path="res://HumanManager.gd" type="Script" id=8]
+[ext_resource path="res://Human.tscn" type="PackedScene" id=9]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+uniform int OCTAVE = 6;
+uniform float mulscale = 5.0;
+uniform float height = 0.6;
+uniform float tide = 0.1;
+uniform float foamthickness = 0.1;
+uniform float timescale = 1.0;
+uniform float waterdeep = 0.3;
+uniform vec4 WATER_COL : hint_color =  vec4(0.04, 0.38, 0.88, 1.0);
+uniform vec4 WATER2_COL : hint_color =  vec4(0.04, 0.35, 0.78, 1.0);
+uniform vec4 FOAM_COL : hint_color = vec4(0.8125, 0.9609, 0.9648, 1.0);
+
+
+float rand(vec2 input){
+	return fract(sin(dot(input,vec2(23.53,44.0)))*42350.45);
+}
+
+float perlin(vec2 input){
+	vec2 i = floor(input);
+	vec2 j = fract(input);
+	vec2 coord = smoothstep(0.,1.,j);
+	
+	float a = rand(i);
+	float b = rand(i+vec2(1.0,0.0));
+	float c = rand(i+vec2(0.0,1.0));
+	float d = rand(i+vec2(1.0,1.0));
+
+	return mix(mix(a,b,coord.x),mix(c,d,coord.x),coord.y);
+}
+
+float fbm(vec2 input){
+	float value = 0.0;
+	float scale = 0.5;
+	
+	for(int i = 0; i < OCTAVE; i++){
+		value += perlin(input)*scale;
+		input*=2.0;
+		scale*=0.5;
+	}
+	return value;
+}
+
+void fragment(){
+	float newtime = TIME*timescale;
+	float fbmval = fbm(vec2(UV.x*mulscale+0.2*sin(0.3*newtime)+0.15*newtime,-0.05*newtime+UV.y*mulscale+0.1*cos(0.68*newtime)));
+	float fbmvalshadow = fbm(vec2(UV.x*mulscale+0.2*sin(-0.6*newtime + 25.0 * UV.y)+0.15*newtime+3.0,-0.05*newtime+UV.y*mulscale+0.13*cos(-0.68*newtime))-7.0+0.1*sin(0.43*newtime));
+	float myheight = height+tide*sin(newtime+5.0*UV.x-8.0*UV.y);
+	float shadowheight = height+tide*1.3*cos(newtime+2.0*UV.x-2.0*UV.y);
+	float withinFoam = step(myheight, fbmval)*step(fbmval, myheight + foamthickness);
+	float shadow = (1.0-withinFoam)*step(shadowheight, fbmvalshadow)*step(fbmvalshadow, shadowheight + foamthickness * 0.7);
+	COLOR = withinFoam*FOAM_COL + shadow*WATER2_COL + ((1.0-withinFoam)*(1.0-shadow))*WATER_COL;
+	//COLOR = vec4(1.0,1.0,1.0,fbmval);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/OCTAVE = 6
+shader_param/mulscale = 10.0
+shader_param/height = 0.6
+shader_param/tide = 0.1
+shader_param/foamthickness = 0.1
+shader_param/timescale = 1.0
+shader_param/waterdeep = 0.3
+shader_param/WATER_COL = Color( 0.290196, 0.364706, 0.847059, 1 )
+shader_param/WATER2_COL = Color( 0.235294, 0.517647, 0.670588, 1 )
+shader_param/FOAM_COL = Color( 0.541176, 0.709804, 0.819608, 1 )
+
+[sub_resource type="Curve2D" id=3]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 1031, 5, 0, 0, 0, 0, 1028, 608, 0, 0, 0, 0, 17, 604, 0, 0, 0, 0, 22, 19, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 1031, 5 )
+}
 
 [node name="Main" type="Node"]
 script = ExtResource( 2 )
 
 [node name="Background" type="TextureRect" parent="."]
+material = SubResource( 2 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource( 4 )
@@ -26,17 +102,22 @@ position = Vector2( 837, 404 )
 [node name="WallPool" type="Node" parent="."]
 
 [node name="WallR" parent="WallPool" instance=ExtResource( 6 )]
+position = Vector2( -99, -1 )
+collision_layer = 2
 
 [node name="WallU" parent="WallPool" instance=ExtResource( 6 )]
-position = Vector2( 722, -7 )
+position = Vector2( 691, -101 )
 rotation = 1.5708
+collision_layer = 2
 
 [node name="WallD" parent="WallPool" instance=ExtResource( 6 )]
-position = Vector2( 670, 614 )
+position = Vector2( 674, 702 )
 rotation = 1.5708
+collision_layer = 2
 
 [node name="WallL" parent="WallPool" instance=ExtResource( 6 )]
-position = Vector2( 1036, 38 )
+position = Vector2( 1124, 43 )
+collision_layer = 2
 
 [node name="WoodManager" type="Node" parent="."]
 script = ExtResource( 5 )
@@ -45,8 +126,26 @@ wood = ExtResource( 7 )
 [node name="WoodPool" type="Node" parent="WoodManager"]
 
 [node name="WoodTimer" type="Timer" parent="WoodManager"]
-wait_time = 2.0
 autostart = true
+
+[node name="Path2D" type="Path2D" parent="WoodManager"]
+position = Vector2( -18, 0 )
+curve = SubResource( 3 )
+
+[node name="PathFollow2D" type="PathFollow2D" parent="WoodManager/Path2D"]
+position = Vector2( 1031, 5 )
+rotation = 1.57579
+
+[node name="HumanManager" type="Node" parent="."]
+script = ExtResource( 8 )
+humanScene = ExtResource( 9 )
+
+[node name="HumanTimer" type="Timer" parent="HumanManager"]
+wait_time = 3.0
+autostart = true
+
+[node name="HumanPit" type="Node" parent="HumanManager"]
 
 [connection signal="BouyWin" from="Finish" to="." method="_on_Finish_BouyWin"]
 [connection signal="timeout" from="WoodManager/WoodTimer" to="WoodManager" method="_on_WoodTimer_timeout"]
+[connection signal="timeout" from="HumanManager/HumanTimer" to="HumanManager" method="_on_HumanTimer_timeout"]

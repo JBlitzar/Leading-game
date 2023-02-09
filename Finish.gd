@@ -5,12 +5,12 @@ extends Area2D
 # var a = 2
 # var b = "text"
 
-
+signal BouyWin
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	self.connect("BouyWin", get_node("/root/Main/HumanManager"), "DismountHuman")
 
-signal BouyWin
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
@@ -18,4 +18,5 @@ signal BouyWin
 
 func _on_Finish_body_entered(body):
 	if body.get_collision_layer() == 32769:
-		emit_signal("BouyWin")
+		if body.has_passenger:
+			emit_signal("BouyWin")

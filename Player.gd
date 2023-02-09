@@ -2,13 +2,14 @@ extends KinematicBody2D
 
 export (int) var speed = 200
 export (float) var rotation_speed = 1.5
+export (float) var friction = 0.95
 onready var screensize = get_viewport_rect().size
 var velocity = Vector2()
 var rotation_dir = 0
-
+func _ready():
+	var animation = $Sprite/AnimationPlayer.play("Boat")
 func get_input():
 	rotation_dir = 0
-	velocity = Vector2()
 	if Input.is_action_pressed("right"):
 		rotation_dir += 1
 	if Input.is_action_pressed("left"):
@@ -22,6 +23,6 @@ func _physics_process(delta):
 	screensize = get_viewport_rect().size
 	get_input()
 	rotation += rotation_dir * rotation_speed * delta
-	
+	velocity *= friction
 	
 	velocity = move_and_slide(velocity)

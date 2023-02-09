@@ -1,21 +1,18 @@
-extends KinematicBody2D
+extends RigidBody2D
 
 
 # Declare member variables here. Examples:
 # var a = 2
-# var b = "text"
-var velocity: Vector2 = Vector2()
 
-# Called when the node enters the scene tree for the first time.
+signal player_collided
 func _ready():
-	randomize()
-	var scalexy = randi() % 4 + 1
-	scale = Vector2(scalexy,scalexy)
-	rotation = ((randi() % 100)/100)*2*3.14
-	
-
-
+	self.connect("player_collided", get_node("/root/Main"), "_on_player_collided")
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	velocity = move_and_slide(velocity)
-	print(position)
+func _on_VisibilityNotifier2D_screen_exited():
+	queue_free()
+
+
+func _on_Wood_body_entered(body):
+	if body.get_collision_layer() == 1:
+		#Player or Tow
+		emit_signal("player_collided")

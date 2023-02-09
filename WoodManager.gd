@@ -16,10 +16,13 @@ func _ready():
 
 
 func _on_WoodTimer_timeout():
-	var woodInstance = wood.instance()
-	woodInstance.position.y = randi() % int(round(screensize.y))
-	var screenside = randi() % 2
-	var xpos = screenside*screensize.y
-	woodInstance.position.x = xpos
-	var woodSpeed = randi() % 300 + 100
-	woodInstance.velocity = Vector2((screenside*2-1)*woodSpeed,0)
+	var log_inst = wood.instance()
+	var log_spawn_location = $Path2D/PathFollow2D
+	log_spawn_location.offset = randi()
+	var direction = log_spawn_location.rotation + PI / 2
+	log_inst.position = log_spawn_location.position
+	direction += rand_range(-PI / 4, PI / 4)
+	log_inst.rotation = direction
+	var velocity = Vector2(rand_range(150.0, 250.0), 0.0)
+	log_inst.linear_velocity = velocity.rotated(direction)
+	add_child(log_inst)

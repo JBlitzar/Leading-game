@@ -1,7 +1,7 @@
 [gd_scene load_steps=2 format=2]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 10, 1000 )
+extents = Vector2( 100, 1000 )
 
 [node name="StaticBody2D" type="StaticBody2D"]
 
