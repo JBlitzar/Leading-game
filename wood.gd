@@ -17,3 +17,11 @@ func _on_Wood_body_entered(body):
 	if body.get_collision_layer() == 1:
 		#Player or Tow
 		emit_signal("player_collided")
+
+
+func _on_DespawnTimer_timeout():
+	$AnimationPlayer.play("Boat sink")
+
+
+func _on_AnimationPlayer_animation_finished(anim_name):
+	call_deferred("queue_free")

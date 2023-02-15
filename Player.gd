@@ -12,6 +12,7 @@ var velocity = Vector2()
 var rotation_dir = 0
 func _ready():
 	var animation = $Sprite/AnimationPlayer.play("Boat")
+	yield(get_tree(), "idle_frame")
 	self.connect("playerdie", get_node("/root/MainMenu/Main"), "playerdie")
 func get_input():
 	rotation_dir = 0

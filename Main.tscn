@@ -146,6 +146,12 @@ autostart = true
 
 [node name="HumanPit" type="Node" parent="HumanManager"]
 
+[node name="Score" type="Label" parent="."]
+margin_right = 40.0
+margin_bottom = 14.0
+rect_scale = Vector2( 5, 5 )
+text = "Score: 0"
+
 [connection signal="BouyWin" from="Finish" to="." method="_on_Finish_BouyWin"]
 [connection signal="BouyWin" from="Finish" to="HumanManager" method="_on_Finish_BouyWin"]
 [connection signal="timeout" from="WoodManager/WoodTimer" to="WoodManager" method="_on_WoodTimer_timeout"]

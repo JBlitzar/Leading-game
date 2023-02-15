@@ -15,6 +15,7 @@ func _ready():
 #func _process(delta):
 #	pass
 func playerdie():
+	print("DIE mainmenu")
 	$MenuUI/GameOver.show()
 	inst.hide()
 
