@@ -12,7 +12,7 @@ var velocity = Vector2()
 var rotation_dir = 0
 func _ready():
 	var animation = $Sprite/AnimationPlayer.play("Boat")
-	self.connect("playerdie", get_node("/root/Main"), "playerdie")
+	self.connect("playerdie", get_node("/root/MainMenu/Main"), "playerdie")
 func get_input():
 	rotation_dir = 0
 	if Input.is_action_pressed("right"):
@@ -26,13 +26,9 @@ func get_input():
 func take_damage():
 	emit_signal("take_damage", damageamt)
 func _on_player_collided():
-	
 	health -= damageamt
 	if health >= 0:
 		take_damage()
-		
-		
-		
 	else:
 		emit_signal("player_die")
 	

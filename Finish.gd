@@ -6,9 +6,6 @@ extends Area2D
 # var b = "text"
 
 signal BouyWin
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	self.connect("BouyWin", get_node("/root/Main/HumanManager"), "DismountHuman")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

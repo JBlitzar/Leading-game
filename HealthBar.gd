@@ -1,4 +1,7 @@
 extends Line2D
+#Note to self: use the progressbar node in the future
+
+
 
 
 # Declare member variables here. Examples:
@@ -15,7 +18,11 @@ func _ready():
 	pass # Replace with function body.
 
 func colorlerp(c1,c2,p):
-	return Color(c1.r*(1-p)+c2.r*p,c1.g*(1-p)+c2.g*p,c1.b*(1-p)+c2.b*p)
+	return Color(
+		c1.r*(1-p)+c2.r*p,
+		c1.g*(1-p)+c2.g*p,
+		c1.b*(1-p)+c2.b*p
+	)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	points = [player.position + offsets[0], player.position+offsets[1]-Vector2(1-health,0)*80]

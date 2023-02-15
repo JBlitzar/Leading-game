@@ -30,3 +30,7 @@ func _on_HumanTimer_timeout():
 	instance.position = Vector2(rndX, rndY)
 	$HumanPit.add_child(instance)
 	
+
+
+func _on_Finish_BouyWin():
+	DismountHuman()

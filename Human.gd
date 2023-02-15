@@ -1,3 +1,4 @@
+class_name Human
 extends Area2D
 
 
@@ -11,15 +12,14 @@ func _ready():
 	$CollisionShape2D.disabled = false
 func dismount():
 	mounted = false
+	follownode.passenger =  null
 	follownode.has_passenger = false
 	follownode = null
-	$CollisionShape2D.disabled = false
-
+	$CollisionShape2D.set_deferred("disabled", false)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if follownode:
-		$CollisionShape2D.disabled = true
-		global_position= follownode.global_position
+		global_position = follownode.global_position
 
 
 func _on_Human_body_entered(body):
@@ -31,6 +31,7 @@ func _on_Human_body_entered(body):
 		$CollisionShape2D.set_deferred("disabled", true)
 		follownode = body
 		body.has_passenger = true
+		body.passenger = self
 		mounted = true
 
 
