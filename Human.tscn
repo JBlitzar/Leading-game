@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Person.png" type="Texture" id=1]
 [ext_resource path="res://Human.gd" type="Script" id=2]
 [ext_resource path="res://arm.png" type="Texture" id=3]
+[ext_resource path="res://Arms.gd" type="Script" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 10, 20 )
@@ -45,10 +46,34 @@ tracks/2/keys = {
 "update": 1,
 "values": [ true ]
 }
+tracks/3/type = "value"
+tracks/3/path = NodePath("Arms/leftarm:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.1 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
+tracks/4/type = "value"
+tracks/4/path = NodePath("Arms/rightarm:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0.1 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ) ]
+}
 
-[sub_resource type="Animation" id=3]
-resource_name = "Arm wave"
-length = 2.0
+[sub_resource type="Animation" id=4]
+resource_name = "Left arm wave"
+loop = true
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:rotation_degrees")
 tracks/0/interp = 1
@@ -56,7 +81,39 @@ tracks/0/loop_wrap = true
 tracks/0/imported = false
 tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 1, 2 ),
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, -90.0, 0.0 ]
+}
+
+[sub_resource type="Animation" id=5]
+resource_name = "Right arm wave"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("../rightarm:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ 0.0, 0.0, 0.0 ]
+}
+
+[sub_resource type="Animation" id=6]
+resource_name = "Right arm wave"
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5, 1 ),
 "transitions": PoolRealArray( 1, 1, 1 ),
 "update": 0,
 "values": [ 0.0, 90.0, 0.0 ]
@@ -80,15 +137,28 @@ disabled = true
 anims/Die = SubResource( 2 )
 
 [node name="Arms" type="Node2D" parent="."]
+script = ExtResource( 4 )
 
-[node name="arm" type="Sprite" parent="Arms"]
+[node name="leftarm" type="Sprite" parent="Arms"]
+modulate = Color( 1, 1, 1, 0 )
+position = Vector2( -18, 11 )
+scale = Vector2( 3, 5 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -3 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Arms/leftarm"]
+"anims/Left arm wave" = SubResource( 4 )
+"anims/Right arm wave" = SubResource( 5 )
+
+[node name="rightarm" type="Sprite" parent="Arms"]
+modulate = Color( 1, 1, 1, 0 )
 position = Vector2( 22, 13 )
 scale = Vector2( 3, 5 )
 texture = ExtResource( 3 )
 offset = Vector2( 0, -3 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Arms/arm"]
-"anims/Arm wave" = SubResource( 3 )
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Arms/rightarm"]
+"anims/Right arm wave" = SubResource( 6 )
 
 [connection signal="body_entered" from="." to="." method="_on_Human_body_entered"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

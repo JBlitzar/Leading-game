@@ -10,7 +10,7 @@
 [ext_resource path="res://HumanManager.gd" type="Script" id=8]
 [ext_resource path="res://Human.tscn" type="PackedScene" id=9]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id=4]
 code = "shader_type canvas_item;
 uniform int OCTAVE = 6;
 uniform float mulscale = 5.0;
@@ -66,7 +66,7 @@ void fragment(){
 }"
 
 [sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+shader = SubResource( 4 )
 shader_param/OCTAVE = 6
 shader_param/mulscale = 10.0
 shader_param/height = 0.6

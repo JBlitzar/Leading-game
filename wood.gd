@@ -17,6 +17,7 @@ func _on_Wood_body_entered(body):
 	if body.get_collision_layer() == 1:
 		#Player or Tow
 		emit_signal("player_collided")
+		call_deferred("queue_free") # "explosion" feature
 
 
 func _on_DespawnTimer_timeout():
