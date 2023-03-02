@@ -4,9 +4,7 @@ export (int) var speed = 200
 export (float) var rotation_speed = 1.5
 export (float) var friction = 0.95
 signal take_damage
-signal player_die
-export (float) var damageamt = 0.05;
-var health: float = 1.0
+signal playerdie
 onready var screensize = get_viewport_rect().size
 var velocity = Vector2()
 var rotation_dir = 0
@@ -25,14 +23,9 @@ func get_input():
 	if Input.is_action_pressed("up"):
 		velocity = Vector2(speed, 0).rotated(rotation)
 func take_damage():
-	emit_signal("take_damage", damageamt)
+	emit_signal("take_damage")
 func _on_player_collided():
-	health -= damageamt
-	if health >= 0:
-		take_damage()
-	else:
-		emit_signal("player_die")
-		print("player knows they died")
+	take_damage()
 	
 	
 	

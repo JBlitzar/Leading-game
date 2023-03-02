@@ -17,9 +17,15 @@ func _ready():
 func playerdie():
 	print("DIE mainmenu")
 	$MenuUI/GameOver.show()
-	inst.hide()
+	inst.call_deferred("queue_free")
 
 func _on_Button_pressed():
 	inst = gamescene.instance()
 	add_child(inst)
 	$MenuUI/StartGame.hide()
+	inst.connect("playerdie", self, "playerdie")
+
+
+func _on_Button_goBack_pressed():
+	$MenuUI/GameOver.hide()
+	$MenuUI/StartGame.show()

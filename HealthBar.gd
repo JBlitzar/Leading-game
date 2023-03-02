@@ -27,5 +27,7 @@ func colorlerp(c1,c2,p):
 func _process(delta):
 	points = [player.position + offsets[0], player.position+offsets[1]-Vector2(1-health,0)*80]
 	default_color = colorlerp(color2,color1,health)
-func _on_KinematicBody2D_take_damage(damageamt):
-	health -= damageamt
+
+
+func _on_Node_update_health_bar(newhealth):
+	health = newhealth
