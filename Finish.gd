@@ -9,6 +9,13 @@ signal BouyWin
 
 func _ready():
 	$AnimationPlayer.play("Finish Flash")
+	var screenSize = get_viewport().get_visible_rect().size
+	var rng = RandomNumberGenerator.new()
+	rng.randomize()
+	var rndX = rng.randi_range(0, screenSize.x)
+	var rndY = rng.randi_range(0, screenSize.y)
+	position = Vector2(rndX, rndY)
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
