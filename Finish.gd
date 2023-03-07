@@ -7,7 +7,8 @@ extends Area2D
 
 signal BouyWin
 
-
+func _ready():
+	$AnimationPlayer.play("Finish Flash")
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):
 #	pass
